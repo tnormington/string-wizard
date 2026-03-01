@@ -161,7 +161,7 @@ export function Metronome() {
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               audioEnabled
                 ? 'bg-sky-600 text-white'
-                : 'bg-gray-700 text-gray-400'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
             }`}
             aria-label={audioEnabled ? 'Mute audio' : 'Enable audio'}
             aria-pressed={audioEnabled}

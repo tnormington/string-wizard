@@ -33,13 +33,13 @@ export function BeatVisualizer({
                   ? 'bg-sky-400 shadow-lg shadow-sky-400/50 scale-110'
                   : isAccent
                     ? 'bg-amber-600 hover:bg-amber-500'
-                    : 'bg-gray-600 hover:bg-gray-500'
+                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
               }
             `}
             aria-label={`Beat ${i + 1}${isAccent ? ', accented' : ''}${isActive ? ', currently playing' : ''}`}
             aria-pressed={isAccent}
           >
-            <span className={`text-sm font-bold ${isActive ? 'text-gray-900' : 'text-white'}`}>
+            <span className={`text-sm font-bold ${isActive ? 'text-gray-900' : 'text-white dark:text-white'}`}>
               {i + 1}
             </span>
             {isAccent && (

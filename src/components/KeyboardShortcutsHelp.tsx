@@ -69,7 +69,7 @@ export function KeyboardShortcutsHelp({ shortcuts, onClose }: KeyboardShortcutsH
           <button
             ref={closeRef}
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             aria-label="Close keyboard shortcuts dialog"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +82,7 @@ export function KeyboardShortcutsHelp({ shortcuts, onClose }: KeyboardShortcutsH
         <div className="px-4 sm:px-6 py-4 space-y-6">
           {grouped.map((group) => (
             <div key={group.category}>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                 {group.label}
               </h3>
               <div className="space-y-2">
@@ -105,7 +105,7 @@ export function KeyboardShortcutsHelp({ shortcuts, onClose }: KeyboardShortcutsH
         {/* Footer */}
         <div className="px-4 sm:px-6 py-3 border-t border-gray-200 dark:border-gray-700 text-center">
           <span className="text-xs text-gray-500">
-            Press <kbd className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-300">Esc</kbd> to close
+            Press <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-gray-600 dark:text-gray-300">Esc</kbd> to close
           </span>
         </div>
       </div>
