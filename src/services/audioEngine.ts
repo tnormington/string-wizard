@@ -1,4 +1,4 @@
-import type { Beat, RhythmPattern, StrokeType } from '../types/rhythm';
+import type { RhythmPattern, StrokeType } from '../types/rhythm';
 
 let audioContext: AudioContext | null = null;
 

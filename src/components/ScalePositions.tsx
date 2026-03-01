@@ -1,4 +1,4 @@
-import { type NoteName, STANDARD_TUNING, getNoteAtFret, getNoteIndex } from '../utils/musicTheory';
+import { type NoteName, STANDARD_TUNING, getNoteIndex } from '../utils/musicTheory';
 import { Fretboard } from './Fretboard';
 
 interface ScalePositionsProps {

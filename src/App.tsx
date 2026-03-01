@@ -1,16 +1,22 @@
 import { useState } from 'react'
+import { ChordLibrary } from './components/ChordLibrary'
 import { FretboardTrainer } from './components/FretboardTrainer'
 import { ScaleLibrary } from './components/ScaleLibrary'
+import { RhythmPatterns } from './components/RhythmPatterns'
+import { IntervalTrainer } from './components/IntervalTrainer'
 
-type AppView = 'trainer' | 'scales';
+type AppView = 'chords' | 'trainer' | 'scales' | 'rhythm' | 'intervals';
 
 const NAV_ITEMS: { key: AppView; label: string }[] = [
+  { key: 'chords', label: 'Chord Library' },
   { key: 'trainer', label: 'Fretboard Trainer' },
   { key: 'scales', label: 'Scale Reference' },
+  { key: 'rhythm', label: 'Rhythm Patterns' },
+  { key: 'intervals', label: 'Interval Trainer' },
 ];
 
 function App() {
-  const [view, setView] = useState<AppView>('scales');
+  const [view, setView] = useState<AppView>('chords');
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -35,8 +41,11 @@ function App() {
         </div>
       </header>
       <main className="container mx-auto p-4 max-w-6xl">
+        {view === 'chords' && <ChordLibrary />}
         {view === 'trainer' && <FretboardTrainer />}
         {view === 'scales' && <ScaleLibrary />}
+        {view === 'rhythm' && <RhythmPatterns />}
+        {view === 'intervals' && <IntervalTrainer />}
       </main>
     </div>
   )
