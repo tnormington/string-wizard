@@ -7,8 +7,10 @@ import { IntervalTrainer } from './components/IntervalTrainer'
 import { Metronome } from './components/Metronome'
 import { ThemeToggle } from './components/ThemeToggle'
 import { KeyboardShortcutsHelp } from './components/KeyboardShortcutsHelp'
+import { AccessibilityPanel } from './components/AccessibilityPanel'
 import { useTheme } from './hooks/useTheme'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
+import { AccessibilityContext, useAccessibilityProvider } from './hooks/useAccessibility'
 import { type ShortcutCommand } from './types/shortcuts'
 
 type AppView = 'chords' | 'trainer' | 'scales' | 'rhythm' | 'intervals' | 'metronome';
@@ -39,7 +41,7 @@ const SHORTCUT_COMMANDS: ShortcutCommand[] = [
   { id: 'show-help', label: 'Show shortcuts', description: 'Show keyboard shortcuts', category: 'general', binding: { key: '?' } },
 ];
 
-function App() {
+function AppContent() {
   const [view, setView] = useState<AppView>('chords');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -93,20 +95,37 @@ function App() {
     return () => unregisterFns.forEach((fn) => fn());
   }, [register, toggleTheme]);
 
+  const currentViewLabel = NAV_ITEMS.find(item => item.key === view)?.label ?? '';
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      {/* Skip to main content link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        Skip to main content
+      </a>
+      <a
+        href="#main-nav"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-48 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        Skip to navigation
+      </a>
+
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700" role="banner">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <h1 className="text-lg sm:text-xl font-bold truncate">Guitar Chords App</h1>
             <div className="flex items-center gap-2">
               {/* Desktop nav */}
-              <nav className="hidden lg:flex gap-1">
+              <nav id="main-nav" className="hidden lg:flex gap-1" aria-label="Main navigation" role="navigation">
                 {NAV_ITEMS.map(item => (
                   <button
                     key={item.key}
                     onClick={() => handleNavClick(item.key)}
                     title={`${item.label} (${item.shortcutKey})`}
+                    aria-current={view === item.key ? 'page' : undefined}
                     className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
                       view === item.key
                         ? 'bg-blue-600 text-white'
@@ -124,11 +143,12 @@ function App() {
                 className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 aria-label="Show keyboard shortcuts"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.01" />
                 </svg>
               </button>
+              <AccessibilityPanel />
               <ThemeToggle theme={theme} onToggle={toggleTheme} />
               {/* Mobile/tablet hamburger */}
               <button
@@ -137,7 +157,7 @@ function App() {
                 aria-label="Toggle navigation menu"
                 aria-expanded={mobileMenuOpen}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   {mobileMenuOpen ? (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   ) : (
@@ -150,11 +170,12 @@ function App() {
 
           {/* Mobile/tablet nav dropdown */}
           {mobileMenuOpen && (
-            <nav className="lg:hidden mt-3 pb-1 flex flex-col gap-1 border-t border-gray-200 dark:border-gray-700 pt-3">
+            <nav className="lg:hidden mt-3 pb-1 flex flex-col gap-1 border-t border-gray-200 dark:border-gray-700 pt-3" aria-label="Mobile navigation">
               {NAV_ITEMS.map(item => (
                 <button
                   key={item.key}
                   onClick={() => handleNavClick(item.key)}
+                  aria-current={view === item.key ? 'page' : undefined}
                   className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     view === item.key
                       ? 'bg-blue-600 text-white'
@@ -162,14 +183,14 @@ function App() {
                   }`}
                 >
                   <span>{item.label}</span>
-                  <span className="ml-2 text-xs opacity-50">{item.shortcutKey}</span>
+                  <span className="ml-2 text-xs opacity-50" aria-hidden="true">{item.shortcutKey}</span>
                 </button>
               ))}
             </nav>
           )}
         </div>
       </header>
-      <main className="container mx-auto px-3 sm:px-4 py-4 max-w-6xl">
+      <main id="main-content" className="container mx-auto px-3 sm:px-4 py-4 max-w-6xl" role="main" aria-label={currentViewLabel}>
         {view === 'chords' && <ChordLibrary />}
         {view === 'trainer' && <FretboardTrainer />}
         {view === 'scales' && <ScaleLibrary />}
@@ -185,8 +206,22 @@ function App() {
           onClose={() => setShowHelp(false)}
         />
       )}
+
+      {/* ARIA live regions for screen reader announcements */}
+      <div id="aria-live-polite" aria-live="polite" aria-atomic="true" className="sr-only" />
+      <div id="aria-live-assertive" aria-live="assertive" aria-atomic="true" className="sr-only" />
     </div>
   )
+}
+
+function App() {
+  const a11y = useAccessibilityProvider();
+
+  return (
+    <AccessibilityContext.Provider value={a11y}>
+      <AppContent />
+    </AccessibilityContext.Provider>
+  );
 }
 
 export default App

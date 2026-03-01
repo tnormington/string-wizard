@@ -32,11 +32,17 @@ export function IntervalTrainer() {
     resetSession,
   } = useIntervalTrainer();
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts — uses capture phase so quiz-specific keys
+  // (Space, number keys) are handled before global shortcuts.
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      // Skip when user is typing in an input/textarea/select
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
       if (e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();
+        e.stopImmediatePropagation();
         if (!currentQuestion) {
           startNewQuestion();
         } else if (showAnswer) {
@@ -44,11 +50,14 @@ export function IntervalTrainer() {
         } else {
           playCurrentInterval();
         }
+        return;
       }
-      // Number keys for answer selection
+      // Number keys for answer selection (only during active quiz)
       if (currentQuestion && !showAnswer) {
         const num = parseInt(e.key, 10);
         if (num >= 1 && num <= availableIntervals.length) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
           submitAnswer(availableIntervals[num - 1]);
         }
       }
@@ -57,8 +66,8 @@ export function IntervalTrainer() {
   );
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown, true); // capture phase
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
   }, [handleKeyDown]);
 
   const accuracy = stats.totalQuestions > 0
@@ -66,7 +75,7 @@ export function IntervalTrainer() {
     : 0;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <section aria-label="Interval Trainer" className="max-w-2xl mx-auto space-y-6">
       {/* Header */}
       <div className="text-center">
         <h2 className="text-3xl font-bold text-white mb-2">Interval Trainer</h2>
@@ -74,16 +83,18 @@ export function IntervalTrainer() {
       </div>
 
       {/* Settings */}
-      <div className="bg-gray-800 rounded-lg p-4 space-y-4">
+      <div className="bg-gray-800 rounded-lg p-4 space-y-4" role="group" aria-label="Training settings">
         <div className="flex flex-wrap gap-4">
           {/* Difficulty selector */}
           <div className="flex-1 min-w-[200px]">
-            <label className="block text-sm font-medium text-gray-300 mb-2">Difficulty</label>
-            <div className="flex gap-2">
+            <span id="difficulty-label" className="block text-sm font-medium text-gray-300 mb-2">Difficulty</span>
+            <div className="flex gap-2" role="radiogroup" aria-labelledby="difficulty-label">
               {DIFFICULTY_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => { setDifficulty(opt.value); resetSession(); }}
+                  role="radio"
+                  aria-checked={difficulty === opt.value}
                   className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     difficulty === opt.value
                       ? 'bg-primary-600 text-white'
@@ -98,12 +109,14 @@ export function IntervalTrainer() {
 
           {/* Direction selector */}
           <div className="flex-1 min-w-[200px]">
-            <label className="block text-sm font-medium text-gray-300 mb-2">Direction</label>
-            <div className="flex gap-2">
+            <span id="direction-label" className="block text-sm font-medium text-gray-300 mb-2">Direction</span>
+            <div className="flex gap-2" role="radiogroup" aria-labelledby="direction-label">
               {DIRECTION_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => setDirection(opt.value)}
+                  role="radio"
+                  aria-checked={direction === opt.value}
                   className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     direction === opt.value
                       ? 'bg-primary-600 text-white'
@@ -120,7 +133,7 @@ export function IntervalTrainer() {
 
       {/* Stats bar */}
       {stats.totalQuestions > 0 && (
-        <div className="bg-gray-800 rounded-lg p-4">
+        <div className="bg-gray-800 rounded-lg p-4" role="region" aria-label="Training statistics">
           <div className="grid grid-cols-4 gap-4 text-center">
             <div>
               <div className="text-2xl font-bold text-white">{stats.correctAnswers}/{stats.totalQuestions}</div>
@@ -165,6 +178,7 @@ export function IntervalTrainer() {
             <button
               onClick={playCurrentInterval}
               disabled={isPlaying}
+              aria-label={isPlaying ? 'Playing interval audio' : 'Replay interval audio'}
               className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all ${
                 isPlaying
                   ? 'bg-primary-800 text-primary-300 cursor-not-allowed animate-pulse'
@@ -179,7 +193,7 @@ export function IntervalTrainer() {
           </div>
 
           {/* Answer choices */}
-          <div>
+          <div role="group" aria-label="Answer choices">
             <h3 className="text-sm font-medium text-gray-400 mb-3">
               {showAnswer ? 'Result' : 'What interval is this?'}
             </h3>
@@ -200,7 +214,7 @@ export function IntervalTrainer() {
 
           {/* Show answer feedback and next button */}
           {showAnswer && (
-            <div className="text-center space-y-4">
+            <div className="text-center space-y-4" role="alert">
               <div
                 className={`text-xl font-bold ${
                   selectedAnswer?.semitones === currentQuestion.interval.semitones
@@ -237,7 +251,7 @@ export function IntervalTrainer() {
           </button>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -270,15 +284,20 @@ function AnswerButton({
     }
   }
 
+  const ariaLabel = showAnswer
+    ? `${interval.name}${isCorrect ? ' (correct answer)' : ''}${isSelected && !isCorrect ? ' (your incorrect answer)' : ''}`
+    : `Option ${index + 1}: ${interval.name}`;
+
   return (
     <button
       onClick={onClick}
       disabled={showAnswer}
+      aria-label={ariaLabel}
       className={`p-3 rounded-lg font-medium transition-all ${bgClass} ${
         showAnswer ? 'cursor-default' : ''
       }`}
     >
-      <span className="text-xs text-gray-400 mr-1">{index + 1}.</span>
+      <span className="text-xs text-gray-400 mr-1" aria-hidden="true">{index + 1}.</span>
       {interval.name}
       <span className="block text-xs opacity-60">{interval.shortName}</span>
     </button>
