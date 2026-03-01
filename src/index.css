@@ -6,9 +6,6 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,4 +16,21 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white;
+}
+
+/* Smooth theme transition on key properties */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Exclude elements where transition causes visual glitches */
+svg *,
+input[type="range"],
+.no-transition {
+  transition-property: none;
 }

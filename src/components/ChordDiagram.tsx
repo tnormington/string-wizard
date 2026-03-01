@@ -24,13 +24,11 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
   const showBaseFret = voicing.baseFret > 1;
 
   return (
-    <div className="flex flex-col items-center">
-      <span className="text-lg font-bold text-white mb-1">{symbol}</span>
+    <div className="flex flex-col items-center w-full">
+      <span className="text-base sm:text-lg font-bold text-white mb-1">{symbol}</span>
       <svg
-        width={width}
-        height={height}
         viewBox={`0 0 ${width} ${height}`}
-        className="select-none"
+        className="select-none w-full max-w-[160px]"
         aria-label={`${name} chord diagram`}
       >
         {/* Nut (thick bar at top) or base fret indicator */}
