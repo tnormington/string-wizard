@@ -826,7 +826,7 @@ export const chords: Chord[] = [
         baseFret: 1,
       },
     ],
-    notes: ['E', 'G#', 'B#'],
+    notes: ['E', 'G#', 'C'],
     intervals: ['1', '3', '#5'],
   },
 
