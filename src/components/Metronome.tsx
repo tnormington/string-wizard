@@ -21,34 +21,42 @@ export function Metronome() {
   const tsLabel = `${timeSignature.beats}/${timeSignature.subdivision}`;
 
   return (
-    <div className="max-w-md mx-auto bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700">
-      <h2 className="text-lg font-semibold text-center text-gray-300 mb-4">Metronome</h2>
+    <section aria-label="Metronome" className="max-w-md mx-auto bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-xl border border-gray-200 dark:border-gray-700">
+      <h2 className="text-lg font-semibold text-center text-gray-600 dark:text-gray-300 mb-4">Metronome</h2>
 
       {/* BPM Display & Controls */}
       <div className="flex flex-col items-center gap-3 mb-6">
-        <div className="text-6xl font-bold tabular-nums text-white">{bpm}</div>
-        <div className="text-sm text-gray-400">BPM</div>
+        <div className="text-6xl font-bold tabular-nums text-gray-900 dark:text-white">{bpm}</div>
+        <div className="text-sm text-gray-500 dark:text-gray-400">BPM</div>
 
         <div className="flex items-center gap-3 w-full">
           <button
             type="button"
             onClick={() => setBpm(bpm - 1)}
-            className="w-10 h-10 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-xl font-bold flex items-center justify-center"
+            aria-label="Decrease BPM"
+            className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white text-xl font-bold flex items-center justify-center"
           >
             -
           </button>
+          <label htmlFor="metronome-bpm" className="sr-only">BPM</label>
           <input
+            id="metronome-bpm"
             type="range"
             min={20}
             max={300}
             value={bpm}
             onChange={e => setBpm(Number(e.target.value))}
-            className="flex-1 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-sky-500"
+            aria-valuemin={20}
+            aria-valuemax={300}
+            aria-valuenow={bpm}
+            aria-valuetext={`${bpm} beats per minute`}
+            className="flex-1 h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-sky-500"
           />
           <button
             type="button"
             onClick={() => setBpm(bpm + 1)}
-            className="w-10 h-10 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-xl font-bold flex items-center justify-center"
+            aria-label="Increase BPM"
+            className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white text-xl font-bold flex items-center justify-center"
           >
             +
           </button>
@@ -64,7 +72,7 @@ export function Metronome() {
               className={`px-2 py-1 text-xs rounded ${
                 bpm === preset
                   ? 'bg-sky-600 text-white'
-                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
               {preset}
@@ -100,10 +108,10 @@ export function Metronome() {
 
       {/* Time Signature */}
       <div className="mb-4">
-        <label className="block text-sm text-gray-400 mb-2">
-          Time Signature: <span className="text-white font-medium">{tsLabel}</span>
-        </label>
-        <div className="flex gap-2 flex-wrap">
+        <span id="time-sig-label" className="block text-sm text-gray-500 dark:text-gray-400 mb-2">
+          Time Signature: <span className="text-gray-900 dark:text-white font-medium">{tsLabel}</span>
+        </span>
+        <div className="flex gap-2 flex-wrap" role="radiogroup" aria-labelledby="time-sig-label">
           {TIME_SIGNATURES.map(ts => {
             const label = `${ts.beats}/${ts.subdivision}`;
             const isSelected = ts.beats === timeSignature.beats && ts.subdivision === timeSignature.subdivision;
@@ -111,11 +119,13 @@ export function Metronome() {
               <button
                 key={label}
                 type="button"
+                role="radio"
+                aria-checked={isSelected}
                 onClick={() => setTimeSignature(ts)}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                   isSelected
                     ? 'bg-sky-600 text-white'
-                    : 'bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 {label}
@@ -128,15 +138,20 @@ export function Metronome() {
       {/* Volume & Audio Toggle */}
       <div className="flex items-center gap-4">
         <div className="flex-1">
-          <label className="block text-sm text-gray-400 mb-1">Volume</label>
+          <label htmlFor="metronome-volume" className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Volume</label>
           <input
+            id="metronome-volume"
             type="range"
             min={0}
             max={1}
             step={0.05}
             value={volume}
             onChange={e => setVolume(Number(e.target.value))}
-            className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-sky-500"
+            aria-valuemin={0}
+            aria-valuemax={1}
+            aria-valuenow={volume}
+            aria-valuetext={`${Math.round(volume * 100)}%`}
+            className="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-sky-500"
           />
         </div>
         <div className="pt-4">
@@ -148,9 +163,10 @@ export function Metronome() {
                 ? 'bg-sky-600 text-white'
                 : 'bg-gray-700 text-gray-400'
             }`}
-            title={audioEnabled ? 'Mute audio' : 'Enable audio'}
+            aria-label={audioEnabled ? 'Mute audio' : 'Enable audio'}
+            aria-pressed={audioEnabled}
           >
-            {audioEnabled ? '🔊' : '🔇'}
+            <span aria-hidden="true">{audioEnabled ? '🔊' : '🔇'}</span>
           </button>
         </div>
       </div>
@@ -159,6 +175,6 @@ export function Metronome() {
       <p className="text-xs text-gray-500 text-center mt-4">
         Click beat circles to toggle accent pattern
       </p>
-    </div>
+    </section>
   );
 }

@@ -14,7 +14,7 @@ export function BeatVisualizer({
   onToggleAccent,
 }: BeatVisualizerProps) {
   return (
-    <div className="flex items-center justify-center gap-3 py-6">
+    <div className="flex items-center justify-center gap-3 py-6" role="group" aria-label="Beat accent pattern">
       {Array.from({ length: beats }, (_, i) => {
         const isActive = isPlaying && currentBeat === i;
         const isAccent = accentPattern[i];
@@ -36,7 +36,8 @@ export function BeatVisualizer({
                     : 'bg-gray-600 hover:bg-gray-500'
               }
             `}
-            title={`Beat ${i + 1} – click to ${isAccent ? 'remove' : 'add'} accent`}
+            aria-label={`Beat ${i + 1}${isAccent ? ', accented' : ''}${isActive ? ', currently playing' : ''}`}
+            aria-pressed={isAccent}
           >
             <span className={`text-sm font-bold ${isActive ? 'text-gray-900' : 'text-white'}`}>
               {i + 1}

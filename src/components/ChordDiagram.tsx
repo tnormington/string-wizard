@@ -25,11 +25,12 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
 
   return (
     <div className="flex flex-col items-center w-full">
-      <span className="text-base sm:text-lg font-bold text-white mb-1">{symbol}</span>
+      <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1">{symbol}</span>
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="select-none w-full max-w-[160px]"
-        aria-label={`${name} chord diagram`}
+        role="img"
+        aria-label={`${name} chord diagram: frets ${voicing.frets.map((f, i) => f === -1 ? `string ${i + 1} muted` : f === 0 ? `string ${i + 1} open` : `string ${i + 1} fret ${f}`).join(', ')}`}
       >
         {/* Nut (thick bar at top) or base fret indicator */}
         {!showBaseFret ? (
@@ -38,7 +39,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
             y={padding.top - 4}
             width={diagramWidth + 4}
             height={5}
-            fill="white"
+            className="fill-gray-900 dark:fill-white"
             rx={1}
           />
         ) : (
@@ -156,7 +157,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
           );
         })}
       </svg>
-      <span className="text-xs text-gray-400 mt-0.5">{name}</span>
+      <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{name}</span>
     </div>
   );
 }

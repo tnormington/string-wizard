@@ -41,9 +41,9 @@ export function BeatNotation({ beats, currentBeat, isPlaying }: BeatNotationProp
                 rounded-lg px-1 py-2 transition-all duration-100
                 ${isActive
                   ? 'bg-primary-500/30 ring-2 ring-primary-400 scale-110'
-                  : 'bg-gray-800/50'
+                  : 'bg-gray-100 dark:bg-gray-800/50'
                 }
-                ${isDownbeat ? 'border-l-2 border-gray-600' : ''}
+                ${isDownbeat ? 'border-l-2 border-gray-300 dark:border-gray-600' : ''}
               `}
             >
               {/* Accent indicator */}
@@ -91,7 +91,7 @@ export function BeatNotation({ beats, currentBeat, isPlaying }: BeatNotationProp
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-3 text-xs text-gray-400">
+      <div className="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400">
         <span className="flex items-center gap-1">
           <span className="text-blue-400">↓</span> Down
         </span>

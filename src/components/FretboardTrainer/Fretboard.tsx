@@ -28,6 +28,7 @@ export function Fretboard({ highlightPosition, feedback, onFretClick, interactiv
     <svg
       viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT}`}
       className="w-full max-w-4xl"
+      style={{ minWidth: '500px' }}
       role="img"
       aria-label="Guitar fretboard"
     >

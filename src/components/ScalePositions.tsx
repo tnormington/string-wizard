@@ -48,15 +48,15 @@ export function ScalePositions({ scaleNotes, rootNote, showIntervals }: ScalePos
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-white">Scale Positions</h3>
-      <p className="text-sm text-gray-400">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Scale Positions</h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400">
         Practice these positions individually, then connect them across the entire neck.
       </p>
       <div className="space-y-8">
         {positions.map((position, i) => (
           <div key={i} className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-300">{position.label}</h4>
-            <div className="overflow-x-auto">
+            <h4 className="text-sm font-medium text-gray-600 dark:text-gray-300">{position.label}</h4>
+            <div className="overflow-x-auto touch-pan-x">
               <Fretboard
                 scaleNotes={scaleNotes}
                 rootNote={rootNote}

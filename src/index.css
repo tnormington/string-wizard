@@ -34,3 +34,144 @@ input[type="range"],
 .no-transition {
   transition-property: none;
 }
+
+/* Mobile touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Prevent text selection on interactive elements during touch */
+  button, [role="button"] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Ensure minimum touch target size (44x44px) */
+  select {
+    min-height: 44px;
+  }
+}
+
+/* Prevent iOS zoom on input focus (font-size >= 16px) */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="search"],
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Smooth horizontal scrolling for fretboards */
+.touch-pan-x {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Accessibility: Focus Visible ===== */
+/* Enhanced focus ring for keyboard navigation (not mouse clicks) */
+:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===== Accessibility: Reduced Motion ===== */
+/* Respect OS-level prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* App-level reduced motion toggle */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ===== Accessibility: Large Text ===== */
+.large-text {
+  font-size: 118.75%; /* ~19px base instead of 16px */
+}
+
+/* ===== Accessibility: High Contrast Mode ===== */
+.high-contrast {
+  --hc-border: #000;
+  --hc-text: #000;
+  --hc-bg: #fff;
+}
+
+.dark.high-contrast {
+  --hc-border: #fff;
+  --hc-text: #fff;
+  --hc-bg: #000;
+}
+
+/* High contrast: increase border and text contrast */
+.high-contrast body,
+.high-contrast .bg-gray-50 {
+  background-color: var(--hc-bg) !important;
+  color: var(--hc-text) !important;
+}
+
+.high-contrast .dark\:bg-gray-900 {
+  background-color: var(--hc-bg) !important;
+}
+
+/* High contrast borders */
+.high-contrast [class*="border-gray"] {
+  border-color: var(--hc-border) !important;
+}
+
+/* High contrast: ensure text has maximum contrast */
+.high-contrast .text-gray-400,
+.high-contrast .text-gray-500,
+.high-contrast .dark\:text-gray-400,
+.high-contrast .dark\:text-gray-300 {
+  color: var(--hc-text) !important;
+  opacity: 0.85;
+}
+
+/* High contrast: stronger focus indicators */
+.high-contrast :focus-visible {
+  outline: 3px solid var(--hc-text) !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--hc-bg), 0 0 0 8px var(--hc-text);
+}
+
+/* High contrast: ensure active/selected states are clearly visible */
+.high-contrast .bg-blue-600,
+.high-contrast .bg-primary-600 {
+  background-color: #1d4ed8 !important;
+  border: 2px solid var(--hc-text) !important;
+}
+
+.dark.high-contrast .bg-blue-600,
+.dark.high-contrast .bg-primary-600 {
+  background-color: #60a5fa !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* High contrast: ensure SVG chord diagrams are visible */
+.high-contrast svg circle[fill="#3b82f6"] {
+  stroke: var(--hc-text);
+  stroke-width: 2;
+}
+
+/* Respect system high contrast preferences */
+@media (forced-colors: active) {
+  * {
+    forced-color-adjust: auto;
+  }
+}

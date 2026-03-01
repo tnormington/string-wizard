@@ -23,19 +23,21 @@ export function ScaleSelector({
     : getScalesByCategory(selectedCategory);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" role="group" aria-label="Scale selection">
       {/* Root note selector */}
       <div>
-        <label className="block text-sm font-medium text-gray-400 mb-2">Root Note</label>
-        <div className="flex flex-wrap gap-1.5">
+        <span id="root-note-label" className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Root Note</span>
+        <div className="grid grid-cols-4 sm:flex sm:flex-wrap gap-1.5" role="radiogroup" aria-labelledby="root-note-label">
           {NOTES.map(note => (
             <button
               key={note}
               onClick={() => onRootChange(note)}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+              role="radio"
+              aria-checked={selectedRoot === note}
+              className={`px-3 py-2 sm:py-1.5 rounded text-sm font-medium transition-colors ${
                 selectedRoot === note
                   ? 'bg-red-500 text-white shadow-md'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               {note}
@@ -46,14 +48,16 @@ export function ScaleSelector({
 
       {/* Category filter */}
       <div>
-        <label className="block text-sm font-medium text-gray-400 mb-2">Category</label>
-        <div className="flex flex-wrap gap-1.5">
+        <span id="category-label" className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Category</span>
+        <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-labelledby="category-label">
           <button
             onClick={() => onCategoryChange('All')}
+            role="radio"
+            aria-checked={selectedCategory === 'All'}
             className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
               selectedCategory === 'All'
                 ? 'bg-blue-500 text-white shadow-md'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
             }`}
           >
             All
@@ -62,10 +66,12 @@ export function ScaleSelector({
             <button
               key={category}
               onClick={() => onCategoryChange(category)}
+              role="radio"
+              aria-checked={selectedCategory === category}
               className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
                 selectedCategory === category
                   ? 'bg-blue-500 text-white shadow-md'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               {category}
@@ -76,16 +82,18 @@ export function ScaleSelector({
 
       {/* Scale list */}
       <div>
-        <label className="block text-sm font-medium text-gray-400 mb-2">Scale</label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-64 overflow-y-auto pr-1">
+        <span id="scale-list-label" className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Scale</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-48 sm:max-h-64 overflow-y-auto pr-1 -webkit-overflow-scrolling-touch" role="listbox" aria-labelledby="scale-list-label">
           {filteredScales.map(([key, scale]) => (
             <button
               key={key}
               onClick={() => onScaleChange(key)}
+              role="option"
+              aria-selected={selectedScale === key}
               className={`text-left px-3 py-2 rounded text-sm transition-colors ${
                 selectedScale === key
                   ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600'
+                  : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
             >
               <span className="font-medium">{scale.name}</span>

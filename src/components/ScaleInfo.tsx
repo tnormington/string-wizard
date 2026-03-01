@@ -10,12 +10,12 @@ export function ScaleInfo({ scale, rootNote }: ScaleInfoProps) {
   const notes = getScaleNotes(rootNote, scale.intervals);
 
   return (
-    <div className="bg-gray-800/50 rounded-lg p-4 space-y-3">
-      <h3 className="text-lg font-semibold text-white">
+    <div className="bg-gray-100 dark:bg-gray-800/50 rounded-lg p-4 space-y-3">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
         {rootNote} {scale.name}
       </h3>
 
-      <p className="text-sm text-gray-400">{scale.description}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{scale.description}</p>
 
       {/* Notes in scale */}
       <div>
@@ -27,7 +27,7 @@ export function ScaleInfo({ scale, rootNote }: ScaleInfoProps) {
               className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold ${
                 i === 0
                   ? 'bg-red-500 text-white'
-                  : 'bg-gray-700 text-gray-200'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
               }`}
             >
               {note}
@@ -43,7 +43,7 @@ export function ScaleInfo({ scale, rootNote }: ScaleInfoProps) {
           {scale.intervals.map((interval, i) => (
             <span
               key={i}
-              className="inline-flex items-center justify-center px-2 h-7 rounded bg-gray-700/70 text-xs text-gray-300 font-mono"
+              className="inline-flex items-center justify-center px-2 h-7 rounded bg-gray-200 dark:bg-gray-700/70 text-xs text-gray-600 dark:text-gray-300 font-mono"
             >
               {getIntervalName(interval)}
             </span>
@@ -54,7 +54,7 @@ export function ScaleInfo({ scale, rootNote }: ScaleInfoProps) {
       {/* Formula (semitones between notes) */}
       <div>
         <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Formula (steps)</span>
-        <p className="text-sm text-gray-300 font-mono mt-1">
+        <p className="text-sm text-gray-700 dark:text-gray-300 font-mono mt-1">
           {scale.intervals.map((interval, i) => {
             if (i === scale.intervals.length - 1) return null;
             const gap = scale.intervals[i + 1] - interval;
@@ -66,7 +66,7 @@ export function ScaleInfo({ scale, rootNote }: ScaleInfoProps) {
       {/* Common use */}
       <div>
         <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Common Uses</span>
-        <p className="text-sm text-gray-300 mt-1">{scale.commonUse}</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{scale.commonUse}</p>
       </div>
     </div>
   );

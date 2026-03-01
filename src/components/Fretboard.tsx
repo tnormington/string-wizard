@@ -65,6 +65,8 @@ export function Fretboard({
       viewBox={`0 0 ${svgWidth} ${svgHeight}`}
       className="w-full max-w-5xl"
       style={{ minWidth: '600px' }}
+      role="img"
+      aria-label={`Scale fretboard diagram, frets ${startFret} to ${endFret}`}
     >
       {/* Nut */}
       {startFret === 0 && (
