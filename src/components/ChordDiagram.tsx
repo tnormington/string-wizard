@@ -20,6 +20,12 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
   const diagramHeight = height - padding.top - padding.bottom;
   const stringSpacing = diagramWidth / (STRING_COUNT - 1);
   const fretSpacing = diagramHeight / FRET_COUNT;
+  const scale = width / 160; // Scale factor relative to default size
+  const dotRadius = Math.max(4, 8 * scale);
+  const fingerFontSize = Math.max(6, 10 * scale);
+  const markerFontSize = Math.max(8, 14 * scale);
+  const markerRadius = Math.max(3, 5 * scale);
+  const fretLabelFontSize = Math.max(8, 12 * scale);
 
   const getStringX = (stringIndex: number) => {
     const visualIndex = leftHanded ? (STRING_COUNT - 1 - stringIndex) : stringIndex;
@@ -53,7 +59,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
             x={leftHanded ? padding.left + diagramWidth + 16 : padding.left - 16}
             y={getFretY(0.5) + 5}
             fill="#9ca3af"
-            fontSize={12}
+            fontSize={fretLabelFontSize}
             textAnchor="middle"
             fontWeight="bold"
           >
@@ -105,10 +111,10 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
           return (
             <rect
               x={barreX}
-              y={barreY - 6}
+              y={barreY - dotRadius}
               width={barreWidth}
-              height={12}
-              rx={6}
+              height={dotRadius * 2}
+              rx={dotRadius}
               fill="#3b82f6"
               opacity={0.7}
             />
@@ -127,7 +133,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
                 x={x}
                 y={padding.top - 12}
                 fill="#ef4444"
-                fontSize={14}
+                fontSize={markerFontSize}
                 textAnchor="middle"
                 fontWeight="bold"
               >
@@ -143,10 +149,10 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
                 key={`open-${stringIdx}`}
                 cx={x}
                 cy={padding.top - 14}
-                r={5}
+                r={markerRadius}
                 fill="none"
                 stroke="#10b981"
-                strokeWidth={1.5}
+                strokeWidth={Math.max(1, 1.5 * scale)}
               />
             );
           }
@@ -157,13 +163,13 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
 
           return (
             <g key={`finger-${stringIdx}`}>
-              <circle cx={x} cy={y} r={8} fill="#3b82f6" />
+              <circle cx={x} cy={y} r={dotRadius} fill="#3b82f6" />
               {voicing.fingers[stringIdx] !== 0 && (
                 <text
                   x={x}
-                  y={y + 4}
+                  y={y + fingerFontSize * 0.4}
                   fill="white"
-                  fontSize={10}
+                  fontSize={fingerFontSize}
                   textAnchor="middle"
                   fontWeight="bold"
                 >
