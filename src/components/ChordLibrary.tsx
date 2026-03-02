@@ -205,7 +205,7 @@ function ChordCard({
     <>
       <button
         role="listitem"
-        aria-label={`${chord.name} chord, ${chord.difficulty} difficulty. Click to see progression suggestions.`}
+        aria-label={`${chord.name} chord. Click to see progression suggestions.`}
         aria-expanded={isSelected}
         onClick={() => onClick(chord)}
         className={`bg-gray-100 dark:bg-gray-800 rounded-lg p-2 sm:p-3 border-2 transition-all flex flex-col items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900 ${
@@ -220,9 +220,6 @@ function ChordCard({
           symbol={chord.symbol}
         />
         <div className="mt-2 flex flex-wrap gap-1 justify-center">
-          <span className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[10px] text-gray-600 dark:text-gray-300">
-            {chord.difficulty}
-          </span>
           <span className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/50 rounded text-[10px] text-blue-600 dark:text-blue-300">
             {getCategoryLabel(chord.category)}
           </span>
