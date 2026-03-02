@@ -1,4 +1,5 @@
 import { type NoteName, STANDARD_TUNING, getNoteAtFret, getInterval, getIntervalName } from '../utils/musicTheory';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 interface FretboardProps {
   scaleNotes: NoteName[];
@@ -22,6 +23,8 @@ export function Fretboard({
   highlightRoot = true,
   tuning = STANDARD_TUNING,
 }: FretboardProps) {
+  const { settings } = useAccessibility();
+  const leftHanded = settings.leftHanded;
   const numStrings = tuning.length;
   const numFrets = endFret - startFret;
 
@@ -57,7 +60,8 @@ export function Fretboard({
   };
 
   const getStringY = (stringIndex: number) => {
-    return paddingTop + stringIndex * stringSpacing;
+    const visualIndex = leftHanded ? (numStrings - 1 - stringIndex) : stringIndex;
+    return paddingTop + visualIndex * stringSpacing;
   };
 
   return (
@@ -98,10 +102,12 @@ export function Fretboard({
         const isDouble = DOUBLE_DOT_POSITIONS.includes(fretNumber);
 
         if (isDouble) {
+          const dotY1 = paddingTop + 1 * stringSpacing;
+          const dotY2 = paddingTop + 4 * stringSpacing;
           return (
             <g key={`dot-${fretNumber}`}>
-              <circle cx={cx} cy={getStringY(1)} r={5} fill="#5a4a3a" opacity={0.6} />
-              <circle cx={cx} cy={getStringY(4)} r={5} fill="#5a4a3a" opacity={0.6} />
+              <circle cx={cx} cy={dotY1} r={5} fill="#5a4a3a" opacity={0.6} />
+              <circle cx={cx} cy={dotY2} r={5} fill="#5a4a3a" opacity={0.6} />
             </g>
           );
         }

@@ -1,4 +1,5 @@
 import type { ChordVoicing } from '../types/chord';
+import { useAccessibility } from '../hooks/useAccessibility';
 
 interface ChordDiagramProps {
   voicing: ChordVoicing;
@@ -11,6 +12,8 @@ const STRING_COUNT = 6;
 const FRET_COUNT = 5;
 
 export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagramProps) {
+  const { settings } = useAccessibility();
+  const leftHanded = settings.leftHanded;
   const height = width * 1.35;
   const padding = { top: 45, bottom: 20, left: 30, right: 20 };
   const diagramWidth = width - padding.left - padding.right;
@@ -18,7 +21,10 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
   const stringSpacing = diagramWidth / (STRING_COUNT - 1);
   const fretSpacing = diagramHeight / FRET_COUNT;
 
-  const getStringX = (stringIndex: number) => padding.left + stringIndex * stringSpacing;
+  const getStringX = (stringIndex: number) => {
+    const visualIndex = leftHanded ? (STRING_COUNT - 1 - stringIndex) : stringIndex;
+    return padding.left + visualIndex * stringSpacing;
+  };
   const getFretY = (fretIndex: number) => padding.top + fretIndex * fretSpacing;
 
   const showBaseFret = voicing.baseFret > 1;
@@ -82,21 +88,27 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
         ))}
 
         {/* Barre indicator */}
-        {voicing.barre && voicing.barreStrings && (
-          <rect
-            x={getStringX(6 - voicing.barreStrings[1]) - 5}
-            y={getFretY(voicing.frets.findIndex((f) => f === voicing.barre) >= 0
-              ? voicing.frets.findIndex((f) => f > 0 && f === Math.min(...voicing.frets.filter(f => f > 0)))
-              : 0) - fretSpacing / 2 + fretSpacing / 2 - 6}
-            width={
-              (voicing.barreStrings[1] - voicing.barreStrings[0]) * stringSpacing + 10
-            }
-            height={12}
-            rx={6}
-            fill="#3b82f6"
-            opacity={0.7}
-          />
-        )}
+        {voicing.barre && voicing.barreStrings && (() => {
+          const barreStartIdx = 6 - voicing.barreStrings[1];
+          const barreEndIdx = 6 - voicing.barreStrings[0];
+          const x1 = getStringX(barreStartIdx);
+          const x2 = getStringX(barreEndIdx);
+          const barreX = Math.min(x1, x2) - 5;
+          const barreWidth = Math.abs(x2 - x1) + 10;
+          return (
+            <rect
+              x={barreX}
+              y={getFretY(voicing.frets.findIndex((f) => f === voicing.barre) >= 0
+                ? voicing.frets.findIndex((f) => f > 0 && f === Math.min(...voicing.frets.filter(f => f > 0)))
+                : 0) - fretSpacing / 2 + fretSpacing / 2 - 6}
+              width={barreWidth}
+              height={12}
+              rx={6}
+              fill="#3b82f6"
+              opacity={0.7}
+            />
+          );
+        })()}
 
         {/* Finger positions, open strings, and muted strings */}
         {voicing.frets.map((fret, stringIdx) => {

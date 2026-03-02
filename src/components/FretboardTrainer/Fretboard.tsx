@@ -1,4 +1,5 @@
 import { getNoteAtPosition, TOTAL_FRETS, STRING_LABELS } from '../../utils/music';
+import { useAccessibility } from '../../hooks/useAccessibility';
 
 interface FretboardProps {
   highlightPosition?: { stringIndex: number; fret: number } | null;
@@ -21,7 +22,12 @@ const BOARD_WIDTH = LEFT_PAD + NUT_WIDTH + FRET_WIDTH * TOTAL_FRETS + 20;
 const BOARD_HEIGHT = TOP_PAD + STRING_GAP * 5 + 40;
 
 export function Fretboard({ highlightPosition, feedback, onFretClick, interactive }: FretboardProps) {
-  const stringY = (idx: number) => TOP_PAD + idx * STRING_GAP;
+  const { settings } = useAccessibility();
+  const leftHanded = settings.leftHanded;
+  const stringY = (idx: number) => {
+    const visualIdx = leftHanded ? (5 - idx) : idx;
+    return TOP_PAD + visualIdx * STRING_GAP;
+  };
   const fretX = (fret: number) => LEFT_PAD + NUT_WIDTH + fret * FRET_WIDTH;
 
   return (
@@ -58,7 +64,7 @@ export function Fretboard({ highlightPosition, feedback, onFretClick, interactiv
         />
       ))}
 
-      {/* Fret markers (dots) */}
+      {/* Fret markers (dots) — fixed visual positions, not tied to string order */}
       {FRET_MARKERS.map((f) => {
         const cx = fretX(f) - FRET_WIDTH / 2;
         const isDouble = DOUBLE_MARKER.includes(f);

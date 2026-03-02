@@ -4,6 +4,7 @@ export interface AccessibilitySettings {
   highContrast: boolean;
   reducedMotion: boolean;
   largeText: boolean;
+  leftHanded: boolean;
 }
 
 interface AccessibilityContextValue {
@@ -11,6 +12,7 @@ interface AccessibilityContextValue {
   toggleHighContrast: () => void;
   toggleReducedMotion: () => void;
   toggleLargeText: () => void;
+  toggleLeftHanded: () => void;
   announce: (message: string, priority?: 'polite' | 'assertive') => void;
 }
 
@@ -26,6 +28,7 @@ function getInitialSettings(): AccessibilitySettings {
     highContrast: window.matchMedia('(prefers-contrast: more)').matches,
     reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     largeText: false,
+    leftHanded: false,
   };
 }
 
@@ -79,6 +82,10 @@ export function useAccessibilityProvider(): AccessibilityContextValue {
     setSettings(prev => ({ ...prev, largeText: !prev.largeText }));
   }, []);
 
+  const toggleLeftHanded = useCallback(() => {
+    setSettings(prev => ({ ...prev, leftHanded: !prev.leftHanded }));
+  }, []);
+
   const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
     const el = document.getElementById(`aria-live-${priority}`);
     if (el) {
@@ -89,7 +96,7 @@ export function useAccessibilityProvider(): AccessibilityContextValue {
     }
   }, []);
 
-  return { settings, toggleHighContrast, toggleReducedMotion, toggleLargeText, announce };
+  return { settings, toggleHighContrast, toggleReducedMotion, toggleLargeText, toggleLeftHanded, announce };
 }
 
 export function useAccessibility(): AccessibilityContextValue {

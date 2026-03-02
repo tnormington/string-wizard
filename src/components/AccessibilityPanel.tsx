@@ -5,7 +5,7 @@ export function AccessibilityPanel() {
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { settings, toggleHighContrast, toggleReducedMotion, toggleLargeText } = useAccessibility();
+  const { settings, toggleHighContrast, toggleReducedMotion, toggleLargeText, toggleLeftHanded } = useAccessibility();
 
   // Close on Escape key
   useEffect(() => {
@@ -83,6 +83,12 @@ export function AccessibilityPanel() {
               description="Increase text size throughout the app"
               checked={settings.largeText}
               onToggle={toggleLargeText}
+            />
+            <ToggleOption
+              label="Left-Handed"
+              description="Mirror diagrams for left-handed players"
+              checked={settings.leftHanded}
+              onToggle={toggleLeftHanded}
             />
           </div>
           <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
