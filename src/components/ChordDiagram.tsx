@@ -14,13 +14,18 @@ const FRET_COUNT = 5;
 export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagramProps) {
   const { settings } = useAccessibility();
   const leftHanded = settings.leftHanded;
+  const scale = width / 160; // Scale factor relative to default size
+  const padding = {
+    top: Math.round(45 * scale),
+    bottom: Math.round(20 * scale),
+    left: Math.round(30 * scale),
+    right: Math.round(20 * scale),
+  };
   const height = width * 1.35;
-  const padding = { top: 45, bottom: 20, left: 30, right: 20 };
   const diagramWidth = width - padding.left - padding.right;
   const diagramHeight = height - padding.top - padding.bottom;
   const stringSpacing = diagramWidth / (STRING_COUNT - 1);
   const fretSpacing = diagramHeight / FRET_COUNT;
-  const scale = width / 160; // Scale factor relative to default size
   const dotRadius = Math.max(4, 8 * scale);
   const fingerFontSize = Math.max(6, 10 * scale);
   const markerFontSize = Math.max(8, 14 * scale);
@@ -37,10 +42,11 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
 
   return (
     <div className="flex flex-col items-center w-full">
-      <span className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1">{symbol}</span>
+      <span className={`${scale < 1 ? 'text-sm' : 'text-base sm:text-lg'} font-bold text-gray-900 dark:text-white mb-1`}>{symbol}</span>
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="select-none w-full max-w-[160px]"
+        className="select-none w-full"
+        style={{ maxWidth: width }}
         role="img"
         aria-label={`${name} chord diagram: frets ${voicing.frets.map((f, i) => f === -1 ? `string ${i + 1} muted` : f === 0 ? `string ${i + 1} open` : `string ${i + 1} fret ${f}`).join(', ')}`}
       >
@@ -56,7 +62,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
           />
         ) : (
           <text
-            x={leftHanded ? padding.left + diagramWidth + 16 : padding.left - 16}
+            x={leftHanded ? padding.left + diagramWidth + Math.round(16 * scale) : padding.left - Math.round(16 * scale)}
             y={getFretY(0.5) + 5}
             fill="#9ca3af"
             fontSize={fretLabelFontSize}
@@ -131,7 +137,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
               <text
                 key={`mute-${stringIdx}`}
                 x={x}
-                y={padding.top - 12}
+                y={padding.top - Math.round(12 * scale)}
                 fill="#ef4444"
                 fontSize={markerFontSize}
                 textAnchor="middle"
@@ -148,7 +154,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
               <circle
                 key={`open-${stringIdx}`}
                 cx={x}
-                cy={padding.top - 14}
+                cy={padding.top - Math.round(14 * scale)}
                 r={markerRadius}
                 fill="none"
                 stroke="#10b981"
