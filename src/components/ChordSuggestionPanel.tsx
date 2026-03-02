@@ -49,7 +49,7 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
         ref={panelRef}
         role="region"
         aria-label={`No suggestions available for ${chord.name}`}
-        className="col-span-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-panel-expand overflow-hidden"
+        className="col-span-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-panel-expand"
       >
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -77,7 +77,7 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
       ref={panelRef}
       role="region"
       aria-label={`Chord progression suggestions for ${chord.name}`}
-      className="col-span-full bg-gray-100 dark:bg-gray-800 border-2 border-blue-500/40 rounded-lg p-3 sm:p-4 animate-panel-expand overflow-hidden"
+      className="col-span-full bg-gray-100 dark:bg-gray-800 border-2 border-blue-500/40 rounded-lg p-3 sm:p-4 animate-panel-expand"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
