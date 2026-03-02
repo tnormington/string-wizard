@@ -50,7 +50,7 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
           />
         ) : (
           <text
-            x={padding.left - 16}
+            x={leftHanded ? padding.left + diagramWidth + 16 : padding.left - 16}
             y={getFretY(0.5) + 5}
             fill="#9ca3af"
             fontSize={12}
