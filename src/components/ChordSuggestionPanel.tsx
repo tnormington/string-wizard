@@ -49,7 +49,7 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
         ref={panelRef}
         role="region"
         aria-label={`No suggestions available for ${chord.name}`}
-        className="col-span-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-panel-expand overflow-hidden"
+        className="col-span-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-panel-expand"
       >
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -77,7 +77,7 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
       ref={panelRef}
       role="region"
       aria-label={`Chord progression suggestions for ${chord.name}`}
-      className="col-span-full bg-gray-100 dark:bg-gray-800 border-2 border-blue-500/40 rounded-lg p-3 sm:p-4 animate-panel-expand overflow-hidden"
+      className="col-span-full bg-gray-100 dark:bg-gray-800 border-2 border-blue-500/40 rounded-lg p-3 sm:p-4 animate-panel-expand"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
@@ -100,40 +100,36 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
         </button>
       </div>
 
-      {/* Suggestion groups */}
-      <div className="space-y-3">
-        {Array.from(grouped.entries()).map(([groupName, items]) => (
-          <div key={groupName}>
-            <h4 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-              {groupName}
-            </h4>
-            <div
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3"
-              role="list"
-              aria-label={`${groupName} suggestions`}
+      {/* All suggestions in a single grid */}
+      <div
+        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"
+        role="list"
+        aria-label="Chord suggestions"
+      >
+        {Array.from(grouped.entries()).flatMap(([groupName, items]) =>
+          items.map((suggestion) => (
+            <button
+              key={suggestion.chord.id}
+              role="listitem"
+              onClick={() => onSelectChord(suggestion.chord)}
+              className="min-w-0 bg-white dark:bg-gray-900 rounded-lg p-1.5 border border-gray-200 dark:border-gray-700 hover:border-blue-500 hover:shadow-md transition-all flex flex-col items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800"
+              aria-label={`Select ${suggestion.chord.name}: ${suggestion.relationship} (${groupName})`}
             >
-              {items.map((suggestion) => (
-                <button
-                  key={suggestion.chord.id}
-                  role="listitem"
-                  onClick={() => onSelectChord(suggestion.chord)}
-                  className="min-w-0 bg-white dark:bg-gray-900 rounded-lg p-2 border border-gray-200 dark:border-gray-700 hover:border-blue-500 hover:shadow-md transition-all flex flex-col items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800"
-                  aria-label={`Select ${suggestion.chord.name}: ${suggestion.relationship}`}
-                >
-                  <ChordDiagram
-                    voicing={suggestion.chord.voicings[0]}
-                    name={suggestion.chord.name}
-                    symbol={suggestion.chord.symbol}
-                    width={120}
-                  />
-                  <span className="mt-1 text-[10px] text-blue-600 dark:text-blue-400 text-center leading-tight">
-                    {suggestion.relationship}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
+              <ChordDiagram
+                voicing={suggestion.chord.voicings[0]}
+                name={suggestion.chord.name}
+                symbol={suggestion.chord.symbol}
+                width={90}
+              />
+              <span className="mt-0.5 text-[9px] text-blue-600 dark:text-blue-400 text-center leading-tight">
+                {suggestion.relationship}
+              </span>
+              <span className="mt-0.5 text-[8px] text-gray-400 dark:text-gray-500 text-center leading-tight">
+                {groupName}
+              </span>
+            </button>
+          ))
+        )}
       </div>
     </div>
   );
