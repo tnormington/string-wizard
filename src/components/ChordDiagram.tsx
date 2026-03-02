@@ -95,12 +95,17 @@ export function ChordDiagram({ voicing, name, symbol, width = 160 }: ChordDiagra
           const x2 = getStringX(barreEndIdx);
           const barreX = Math.min(x1, x2) - 5;
           const barreWidth = Math.abs(x2 - x1) + 10;
+          // Derive barre fret from the minimum fret value of the barred strings
+          const barredStringFrets = voicing.frets
+            .slice(barreStartIdx, barreEndIdx + 1)
+            .filter((f) => f > 0);
+          const barreFret = Math.min(...barredStringFrets);
+          const adjustedBarreFret = showBaseFret ? barreFret - voicing.baseFret + 1 : barreFret;
+          const barreY = getFretY(adjustedBarreFret) - fretSpacing / 2;
           return (
             <rect
               x={barreX}
-              y={getFretY(voicing.frets.findIndex((f) => f === voicing.barre) >= 0
-                ? voicing.frets.findIndex((f) => f > 0 && f === Math.min(...voicing.frets.filter(f => f > 0)))
-                : 0) - fretSpacing / 2 + fretSpacing / 2 - 6}
+              y={barreY - 6}
               width={barreWidth}
               height={12}
               rx={6}
