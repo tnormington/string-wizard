@@ -7,6 +7,15 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      keyframes: {
+        'panel-expand': {
+          '0%': { opacity: '0', maxHeight: '0', transform: 'translateY(-8px)' },
+          '100%': { opacity: '1', maxHeight: '600px', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'panel-expand': 'panel-expand 200ms ease-out forwards',
+      },
       colors: {
         primary: {
           50: '#f0f9ff',

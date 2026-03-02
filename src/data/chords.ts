@@ -21,7 +21,7 @@ export const chords: Chord[] = [
       {
         frets: [-1, 3, 5, 5, 5, 3],
         fingers: [0, 1, 3, 3, 3, 1],
-        baseFret: 1,
+        baseFret: 3,
         barre: 1,
         barreStrings: [1, 5],
       },
@@ -145,7 +145,7 @@ export const chords: Chord[] = [
       {
         frets: [-1, 2, 4, 4, 4, 2],
         fingers: [0, 1, 3, 3, 3, 1],
-        baseFret: 1,
+        baseFret: 2,
         barre: 1,
         barreStrings: [1, 5],
       },
@@ -203,7 +203,7 @@ export const chords: Chord[] = [
       {
         frets: [4, 6, 6, 5, 4, 4],
         fingers: [1, 3, 4, 2, 1, 1],
-        baseFret: 1,
+        baseFret: 4,
         barre: 1,
         barreStrings: [1, 6],
       },
@@ -245,7 +245,7 @@ export const chords: Chord[] = [
       {
         frets: [-1, 2, 4, 4, 3, 2],
         fingers: [0, 1, 3, 4, 2, 1],
-        baseFret: 1,
+        baseFret: 2,
         barre: 1,
         barreStrings: [1, 5],
       },
@@ -265,7 +265,7 @@ export const chords: Chord[] = [
       {
         frets: [-1, 3, 5, 5, 4, 3],
         fingers: [0, 1, 3, 4, 2, 1],
-        baseFret: 1,
+        baseFret: 3,
         barre: 1,
         barreStrings: [1, 5],
       },
@@ -341,7 +341,7 @@ export const chords: Chord[] = [
       {
         frets: [3, 5, 5, 3, 3, 3],
         fingers: [1, 3, 4, 1, 1, 1],
-        baseFret: 1,
+        baseFret: 3,
         barre: 1,
         barreStrings: [1, 6],
       },
@@ -765,7 +765,7 @@ export const chords: Chord[] = [
       {
         frets: [-1, 2, 3, 4, 3, -1],
         fingers: [0, 1, 2, 4, 3, 0],
-        baseFret: 1,
+        baseFret: 2,
       },
     ],
     notes: ['B', 'D', 'F'],
@@ -783,7 +783,7 @@ export const chords: Chord[] = [
       {
         frets: [-1, 3, 4, 5, 4, -1],
         fingers: [0, 1, 2, 4, 3, 0],
-        baseFret: 1,
+        baseFret: 3,
       },
     ],
     notes: ['C', 'Eb', 'Gb'],
@@ -921,7 +921,7 @@ export const chords: Chord[] = [
       {
         frets: [3, 5, 5, -1, -1, -1],
         fingers: [1, 3, 4, 0, 0, 0],
-        baseFret: 1,
+        baseFret: 3,
       },
     ],
     notes: ['G', 'D'],
@@ -957,7 +957,7 @@ export const chords: Chord[] = [
       {
         frets: [-1, 3, 5, 5, -1, -1],
         fingers: [0, 1, 3, 4, 0, 0],
-        baseFret: 1,
+        baseFret: 3,
       },
     ],
     notes: ['C', 'G'],
