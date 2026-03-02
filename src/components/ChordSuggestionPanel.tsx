@@ -49,7 +49,7 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
         ref={panelRef}
         role="region"
         aria-label={`No suggestions available for ${chord.name}`}
-        className="col-span-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-panel-expand"
+        className="col-span-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-panel-expand overflow-hidden"
       >
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -77,7 +77,7 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
       ref={panelRef}
       role="region"
       aria-label={`Chord progression suggestions for ${chord.name}`}
-      className="col-span-full bg-gray-100 dark:bg-gray-800 border-2 border-blue-500/40 rounded-lg p-3 sm:p-4 animate-panel-expand"
+      className="col-span-full bg-gray-100 dark:bg-gray-800 border-2 border-blue-500/40 rounded-lg p-3 sm:p-4 animate-panel-expand overflow-hidden"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
@@ -117,7 +117,7 @@ export function ChordSuggestionPanel({ chord, onSelectChord, onClose }: ChordSug
                   key={suggestion.chord.id}
                   role="listitem"
                   onClick={() => onSelectChord(suggestion.chord)}
-                  className="bg-white dark:bg-gray-900 rounded-lg p-2 border border-gray-200 dark:border-gray-700 hover:border-blue-500 hover:shadow-md transition-all flex flex-col items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800"
+                  className="min-w-0 bg-white dark:bg-gray-900 rounded-lg p-2 border border-gray-200 dark:border-gray-700 hover:border-blue-500 hover:shadow-md transition-all flex flex-col items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800"
                   aria-label={`Select ${suggestion.chord.name}: ${suggestion.relationship}`}
                 >
                   <ChordDiagram
